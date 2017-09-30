@@ -13,7 +13,6 @@ class App extends Component {
 
     this.state = {
       books: [],
-      history: [],
       filters: [],
       categories: [],
       activeCategory: null,
@@ -29,7 +28,7 @@ class App extends Component {
       activeCategory: this.state.activeCategory,
       filters: getActiveFilter(this.state), ...data
     };
-    api.updateBook(params, ({ history, books }) => this.setState({ history, books }));
+    api.updateBook(params, ({ books }) => this.setState({ books }));
   }
 
   search = (search) => {
@@ -72,12 +71,11 @@ class App extends Component {
       activeCategory: this.state.activeCategory,
       ...data,
     };
-    api.addBook(params, ({ history, books }) => this.setState({ history, books }));
+    api.addBook(params, ({ books }) => this.setState({ books }));
   }
 
   componentDidMount() {
     api.getInitData(this.state.search, ({ filters, books }) => this.setState({ filters, books }));
-    api.getHistoryData(history => this.setState({ history }));
     api.getCategoriesData(categories => this.setState({ categories }));
   }
 
@@ -95,7 +93,6 @@ class App extends Component {
       <div>
         <Header />
         <Sidebar
-          history={this.state.history}
           setCategory={this.setCategory}
           categories={this.state.categories}
           openPopup={() => this.setState({ popup: { type: 'add' } })}

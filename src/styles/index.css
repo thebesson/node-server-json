@@ -215,15 +215,6 @@ sidebar {
   background-size: contain;
 }
 
-.history_pic {
-  background-image: url("/images/history.png");
-  background-size: contain;
-  width: 13px;
-  height: 13px;
-  margin-left: 10px;
-  float: left;
-}
-
 .select_item {
   color: white !important;
   background-color: #16A3F9;
@@ -260,34 +251,8 @@ sidebar {
   color: #b5b9c4;
 }
 
-.history_msg {
-  color: #b5b9c4;
-  padding: 10px;
-  font-size: 14px;
-}
-
-.history_text {
-  margin-top: -5px;
-  font-size: 11px;
-  line-height: 1.5;
-  margin-left: 36px;
-  margin-bottom: 20px;
-}
-
-#history_msgs {
-  padding-top: 30px;
-}
-
 .noborder {
   border: none;
-}
-
-.history_text p {
-  margin-bottom: 10px;
-}
-
-.history_text span {
-  font-family: monospace;
 }
 
 footer:before {
