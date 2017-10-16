@@ -13,6 +13,7 @@ class App extends Component {
 
     this.state = {
       books: [],
+      history: [],
       filters: [],
       categories: [],
       activeCategory: null,
@@ -21,12 +22,12 @@ class App extends Component {
     }
   }
 
-  updateBook = (id, data) => {
+  updateBook = (_id, data) => {
     const params = {
-      id,
+      _id,
       search: this.state.search || null,
       activeCategory: this.state.activeCategory,
-      filters: getActiveFilter(this.state), ...data
+      activeFilter: getActiveFilter(this.state), ...data
     };
     api.updateBook(params, ({ books }) => this.setState({ books }));
   }
@@ -34,54 +35,65 @@ class App extends Component {
   search = (search) => {
     const params = {
       search,
-      filters: getActiveFilter(this.state),
+      activeFilter: getActiveFilter(this.state),
       activeCategory: this.state.activeCategory,
     };
-    api.search(params, ({ books }) => this.setState({ search, books }));
+    api.getBooks(params, ({ books }) => this.setState({ search, books }));
   }
 
-  setFilter = (id) => {
-    const newFilters = {
-      filters: this.state.filters.map(filter => ({
-        ...filter,
-        active: filter.id === id,
-      }))
-    };
+  setFilter = (type) => {
+    const newFilters = this.state.filters.map(filter => ({
+      ...filter,
+      active: filter.type === type,
+    }));
     const params = {
       search: this.state.search || null,
-      filters: getActiveFilter(newFilters),
+      activeFilter: getActiveFilter({ filters: newFilters }),
       activeCategory: this.state.activeCategory,
     };
-    api.setFilter(params, ({ books }) => this.setState({ filters: newFilters, books }));
+    api.getBooks(params, ({ books }) => this.setState({ filters: newFilters, books }));
   }
 
-  setCategory = (id) => {
+  setCategory = (type) => {
     const params = {
       search: this.state.search || null,
-      filters: getActiveFilter(this.state),
-      activeCategory: id,
+      activeFilter: getActiveFilter(this.state),
+      activeCategory: type,
     };
-    api.setCategory(params, ({ books }) => this.setState({ activeCategory: id, books }));
+    api.getBooks(params, ({ books }) => this.setState({ activeCategory: type, books }));
   }
 
   addBook(data) {
     const params = {
       search: this.state.search || null,
-      filters: getActiveFilter(this.state),
+      activeFilter: getActiveFilter(this.state),
       activeCategory: this.state.activeCategory,
       ...data,
     };
     api.addBook(params, ({ books }) => this.setState({ books }));
   }
 
+  deleteBook(_id) {
+    const params = {
+      search: this.state.search || null,
+      activeFilter: getActiveFilter(this.state),
+      activeCategory: this.state.activeCategory,
+      _id,
+    };
+    api.deleteBook(params, ({ books }) => this.setState({ books }));
+  }
+
   componentDidMount() {
     api.getInitData(this.state.search, ({ filters, books }) => this.setState({ filters, books }));
+    api.getHistoryData(history => this.setState({ history }));
     api.getCategoriesData(categories => this.setState({ categories }));
   }
 
   closePopup = (type, book, id) => {
     if (type === 'add') {
       this.addBook(book);
+    } else if (type === 'delete') {
+      this.deleteBook(id);
     } else if (type === 'edit') {
       this.updateBook(id, book);
     }
@@ -93,6 +105,7 @@ class App extends Component {
       <div>
         <Header />
         <Sidebar
+          history={this.state.history}
           setCategory={this.setCategory}
           categories={this.state.categories}
           openPopup={() => this.setState({ popup: { type: 'add' } })}

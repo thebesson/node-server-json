@@ -13,7 +13,7 @@ export class Popup extends React.Component {
       this.state = {
         title: props.data.title,
         author: props.data.author,
-        labels: props.data.labels,
+        keywords: props.data.keywords,
         img: props.data.img,
       };
     }
@@ -22,7 +22,7 @@ export class Popup extends React.Component {
   onSubmit = (e) => {
     const { closePopup, type, data = {} } = this.props;
     e.preventDefault();
-    closePopup(type, this.state, data.id);
+    closePopup(type, this.state, data._id);
   }
 
   onCoverChange = (reader, e) => {
@@ -33,6 +33,12 @@ export class Popup extends React.Component {
   closeForm = (e) => {
     e.preventDefault();
     this.props.closePopup(null);
+  }
+
+  deleteBook = (e) => {
+    e.preventDefault();
+    const { closePopup, data = {} } = this.props;
+    closePopup('delete', null, data._id);
   }
 
   render() {
@@ -49,8 +55,9 @@ export class Popup extends React.Component {
           <h2>{type === 'add' ? 'Add book' : 'Change book'}</h2>
           <form onSubmit={this.onSubmit}>
             <label>Title: <input value={this.state.title} onChange={e => this.setState({ title: e.target.value })} type="text" required /></label><br />
-            <label>Author: <input value={this.state.author} onChange={e => this.setState({ author: e.target.value })} type="text" required /></label><br />
-            <label>Labels: <input value={this.state.labels} onChange={e => this.setState({ labels: e.target.value })} type="text" required /></label><br />
+            <label>Author first name: <input value={this.state.author.firstName} onChange={e => this.setState({ author: { ...this.state.author, firstName: e.target.value } })} type="text" required /></label><br />
+            <label>Author last name: <input value={this.state.author.lastName} onChange={e => this.setState({ author: { ...this.state.author, lastName: e.target.value} })} type="text" required /></label><br />
+            <label>Keywords: <input value={this.state.keywords} onChange={e => this.setState({ keywords: e.target.value })} type="text" /></label><br />
             <label>Cover: <input onChange={this.onCoverChange.bind(this, reader)} accept="image/*" type="file" required={type === 'add'} /></label><br />
             <img
               src={type === 'edit' ? `/books/${this.props.data.img}` : null}
@@ -62,6 +69,7 @@ export class Popup extends React.Component {
             /><br />
             <div className="buttons">
               <input type="submit" value="Submit" />
+              <button onClick={this.deleteBook}>Delete</button>
               <button onClick={this.closeForm}>Cancel</button>
             </div>
           </form>

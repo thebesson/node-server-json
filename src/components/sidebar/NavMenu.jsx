@@ -12,5 +12,7 @@ export const NavMenu = props => (
       <div className="favourite_pic menu_pic"></div>Favourite Books</a>
     <a>
       <div className="wishlist_pic menu_pic"></div>Wishlist</a>
+    <a>
+      <div className="history_pic menu_pic"></div>History</a>
   </div>
 );
