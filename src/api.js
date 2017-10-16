@@ -9,14 +9,12 @@ export const api = {
     { id: 2, move: 'added', book: 'Fight Club', author: 'Chuck Palahniuk', text: 'to your Must Read Titles', time: '2 years' },
   ]),
   getCategoriesData: (callback) => (
-    fetch(`http://localhost:${PORT}/api/categories`)
-      .then(response => response.json())
-      .then(response => isDebug ? callback([
+    callback([
         { type: 'must_read', title: 'Must Read Titles', color: '#ff517e' },
         { type: 'best', title: 'Best Of List', color: '#ffb700' },
         { type: 'classic', title: 'Classic Novels', color: '#03bedf' },
         { type: 'non_fiction', title: 'Non Fiction', color: '#847ede' },
-      ]) : callback(response))
+      ])
   ),
   getInitData: (search, callback) => (
     fetch(`http://localhost:${PORT}/api/filters`)
