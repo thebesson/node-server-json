@@ -37,7 +37,7 @@ app.listen(3000, function () {
 });
 ```
 Теперь все готово для настройки [роутинга](http://expressjs.com/ru/guide/routing.html).<br />
-Пример простейшего роутинга:
+Простейший пример:
 ```js
 app.get('/', function (req, res) {
   res.send('Hello World!');
